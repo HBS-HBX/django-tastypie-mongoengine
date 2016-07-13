@@ -5,7 +5,8 @@ import sys
 from django.conf import urls
 from django.core import exceptions, urlresolvers
 from django.db.models import base as models_base
-from django.utils import datastructures
+# from django.utils import datastructures
+from collections import OrderedDict
 
 try:
     # Django 1.5+
@@ -39,7 +40,8 @@ QUERY_TERMS_ALL = getattr(mongoengine_tranform, 'MATCH_OPERATORS', (
 
 
 class Query(object):
-    query_terms = dict([(query_term, None) for query_term in QUERY_TERMS_ALL])
+    # query_terms = dict([(query_term, None) for query_term in QUERY_TERMS_ALL])
+    query_terms = set(QUERY_TERMS_ALL)
 
 if not hasattr(queryset.QuerySet, 'query'):
     queryset.QuerySet.query = Query()
@@ -51,7 +53,8 @@ class NOT_HYDRATED(object):
     pass
 
 
-class ListQuerySet(datastructures.SortedDict):
+# class ListQuerySet(datastructures.SortedDict):
+class ListQuerySet(OrderedDict):
     # Workaround for https://github.com/toastdriven/django-tastypie/pull/670
     query = Query()
 
@@ -722,7 +725,7 @@ class MongoEngineResource(resources.ModelResource):
                 'attribute': name,
                 'unique': f.unique or primary_key,
                 'null': not f.required and not primary_key,
-                'help_text': f.help_text,
+                'help_text': getattr(f, 'help_text', None), # f.help_text
             }
 
             # If field is not required, it does not matter if set default value,
