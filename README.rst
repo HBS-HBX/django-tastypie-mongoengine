@@ -5,8 +5,8 @@ This Django application provides MongoEngine_ support for django-tastypie_.
 
 **This project is unmaintained. If anyone wants to step up and take over maintenance, please open an issue.**
 
-Django 1.9+ fixes (with django-tastypie 0.13.3)
------------------------------------------------
+Django 1.9+ compatibility fixes
+-------------------------------
 
 * Fixed 'self._meta.queryset.query.query_terms' to return a set instead of dictionary as according to django-tastypie 0.13.3.
 * Replaced 'SortedDict' with 'collections.OrderedDict' since SortedDict is deprecated as of Django 1.7 & removed in Django 1.9.
@@ -15,10 +15,10 @@ Django 1.9+ fixes (with django-tastypie 0.13.3)
 Requirements
 ------------
 
-* Python_ 2.6+
-* Django_ 1.5+
-* django-tastypie_ 0.9.12+
-* MongoEngine_ >0.8.0, <0.8.2
+* Python_ 2.7+
+* Django_ 1.9+
+* django-tastypie_ 0.13.3+
+* MongoEngine_ 0.10.6+
 
 .. _Python: https://python.org
 .. _Django: http://djangoproject.com
