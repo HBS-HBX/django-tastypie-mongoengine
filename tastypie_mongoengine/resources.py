@@ -3,7 +3,7 @@ import re
 import sys
 
 from django.conf import urls
-from django.core import exceptions, urlresolvers
+from django.urls import exceptions, urlresolvers
 from django.db.models import base as models_base
 # from django.utils import datastructures
 from collections import OrderedDict
