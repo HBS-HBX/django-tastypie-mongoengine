@@ -175,7 +175,7 @@ class EmbeddedListField(BuildRelatedMixin, fields.ToManyField):
             return data
 
         data['embedded'].update({
-            'resource_types': type_map.keys(),
+            'resource_types': list(type_map.keys()),
         })
 
         return data
@@ -185,7 +185,7 @@ class EmbeddedListField(BuildRelatedMixin, fields.ToManyField):
 
         the_m2ms = None
 
-        if isinstance(self.attribute, basestring):
+        if isinstance(self.attribute, str):
             the_m2ms = getattr(bundle.obj, self.attribute)
         elif callable(self.attribute):
             the_m2ms = self.attribute(bundle)
@@ -211,10 +211,7 @@ class EmbeddedListField(BuildRelatedMixin, fields.ToManyField):
 
             m2m_bundle = tastypie_bundle.Bundle(obj=m2m, request=bundle.request)
             self.m2m_resources.append(m2m_resource)
-            if tastypie.__version__ >= (0, 9, 15):
-                m2m_dehydrated.append(self.dehydrate_related(m2m_bundle, m2m_resource, for_list=for_list))
-            else:
-                m2m_dehydrated.append(self.dehydrate_related(m2m_bundle, m2m_resource))
+            m2m_dehydrated.append(self.dehydrate_related(m2m_bundle, m2m_resource))
 
         return m2m_dehydrated
 
@@ -275,7 +272,7 @@ class ReferencedListField(TastypieMongoengineMixin, fields.ToManyField):
 
         the_m2ms = None
 
-        if isinstance(self.attribute, basestring):
+        if isinstance(self.attribute, str):
             the_m2ms = getattr(bundle.obj, self.attribute)
         elif callable(self.attribute):
             the_m2ms = self.attribute(bundle)
@@ -293,10 +290,7 @@ class ReferencedListField(TastypieMongoengineMixin, fields.ToManyField):
             m2m_resource = self.get_related_resource(m2m)
             m2m_bundle = tastypie_bundle.Bundle(obj=m2m, request=bundle.request)
             self.m2m_resources.append(m2m_resource)
-            if tastypie.__version__ >= (0, 9, 15):
-                m2m_dehydrated.append(self.dehydrate_related(m2m_bundle, m2m_resource, for_list=for_list))
-            else:
-                m2m_dehydrated.append(self.dehydrate_related(m2m_bundle, m2m_resource))
+            m2m_dehydrated.append(self.dehydrate_related(m2m_bundle, m2m_resource))
 
         return m2m_dehydrated
 
@@ -304,7 +298,7 @@ class ReferencedListField(TastypieMongoengineMixin, fields.ToManyField):
         # We are ignoring any extra fields not present in resource
         # We delete them because otherwise resource_from_data fail
         # when using getattr and they are missing in resource
-        for k in data.keys():
+        for k in list(data.keys()):
             if not hasattr(fk_resource, k):
                 del data[k]
 
