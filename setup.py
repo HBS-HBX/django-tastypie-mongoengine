@@ -10,7 +10,7 @@ try:
 except ImportError:
     pass
 
-VERSION = '0.4.6'
+VERSION = '0.4.7'
 
 if __name__ == '__main__':
     setup(
@@ -35,7 +35,7 @@ if __name__ == '__main__':
         ),
         zip_safe = False,
         install_requires = (
-            'Django>=1.10.5,<2',
+            'Django>=1.10.5,<2.1',
             'django-tastypie>=0.13.3',
             'mongoengine>=0.13.0',
             'python-dateutil>=2.5.0',
