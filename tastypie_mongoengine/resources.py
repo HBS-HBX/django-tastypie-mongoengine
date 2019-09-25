@@ -569,19 +569,19 @@ class MongoEngineResource(resources.ModelResource, metaclass=MongoEngineModelDec
         try:
             return super(MongoEngineResource, self).obj_get(bundle=bundle, **kwargs)
         except self._meta.object_class.DoesNotExist as ex:
-            exp = models_base.subclass_exception('DoesNotExist', (self._meta.object_class.DoesNotExist, exceptions.ObjectDoesNotExist), self._meta.object_class.DoesNotExist.__module__)
+            exp = models_base.subclass_exception('DoesNotExist', (self._meta.object_class.DoesNotExist, exceptions.ObjectDoesNotExist), self._meta.object_class.DoesNotExist.__module__, type(self))
             raise exp(*ex.args)
         except queryset.DoesNotExist as ex:
-            exp = models_base.subclass_exception('DoesNotExist', (queryset.DoesNotExist, exceptions.ObjectDoesNotExist), queryset.DoesNotExist.__module__)
+            exp = models_base.subclass_exception('DoesNotExist', (queryset.DoesNotExist, exceptions.ObjectDoesNotExist), queryset.DoesNotExist.__module__, type(self))
             raise exp(*ex.args)
         except self._meta.object_class.MultipleObjectsReturned as ex:
-            exp = models_base.subclass_exception('MultipleObjectsReturned', (self._meta.object_class.MultipleObjectsReturned, exceptions.MultipleObjectsReturned), self._meta.object_class.MultipleObjectsReturned.__module__)
+            exp = models_base.subclass_exception('MultipleObjectsReturned', (self._meta.object_class.MultipleObjectsReturned, exceptions.MultipleObjectsReturned), self._meta.object_class.MultipleObjectsReturned.__module__, type(self))
             raise exp(*ex.args)
         except queryset.MultipleObjectsReturned as ex:
-            exp = models_base.subclass_exception('MultipleObjectsReturned', (queryset.MultipleObjectsReturned, exceptions.MultipleObjectsReturned), queryset.MultipleObjectsReturned.__module__)
+            exp = models_base.subclass_exception('MultipleObjectsReturned', (queryset.MultipleObjectsReturned, exceptions.MultipleObjectsReturned), queryset.MultipleObjectsReturned.__module__, type(self))
             raise exp(*ex.args)
         except mongoengine.ValidationError as ex:
-            exp = models_base.subclass_exception('DoesNotExist', (queryset.DoesNotExist, exceptions.ObjectDoesNotExist), queryset.DoesNotExist.__module__)
+            exp = models_base.subclass_exception('DoesNotExist', (queryset.DoesNotExist, exceptions.ObjectDoesNotExist), queryset.DoesNotExist.__module__, type(self))
             raise exp(*ex.args)
 
     def obj_create(self, bundle, **kwargs):
