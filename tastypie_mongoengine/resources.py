@@ -3,7 +3,8 @@ import re
 import sys
 
 from django.conf import urls
-from django.core import exceptions, urlresolvers
+from django.core import exceptions
+import django.urls as urlresolvers
 from django.db.models import base as models_base
 # from django.utils import datastructures
 from collections import OrderedDict
@@ -27,7 +28,6 @@ except ImportError:
 from tastypie_mongoengine import fields as tastypie_mongoengine_fields
 
 from tastypie.exceptions import NotFound
-from django.core.urlresolvers import Resolver404
 
 
 # When Tastypie accesses query terms used by QuerySet it assumes the interface of Django ORM.
@@ -219,9 +219,10 @@ class MongoEngineModelDeclarativeMetaclass(resources.ModelDeclarativeMetaclass):
                     del(new_class.base_fields[field_name])
             if field_name in new_class.declared_fields:
                 continue
-            if len(include_fields) and field_name not in include_fields:
+            # Meta.fields is None by default
+            if include_fields and field_name not in include_fields:
                 del(new_class.base_fields[field_name])
-            if len(excludes) and field_name in excludes:
+            if excludes and field_name in excludes:
                 del(new_class.base_fields[field_name])
 
         # Add in the new fields
@@ -288,13 +289,13 @@ class MongoEngineResource(resources.ModelResource, metaclass=MongoEngineModelDec
         """
         try:
             return super(MongoEngineResource, self).get_via_uri(uri, request)
-        except (NotFound, Resolver404):
+        except (NotFound, urlresolvers.Resolver404):
             # if this is a polymorphic resource check the uri against the resources in self._meta.polymorphic
             type_map = getattr(self._meta, 'polymorphic', {})
             for type_, resource in type_map.items():
                 try:
                     return resource().get_via_uri(uri, request)
-                except (NotFound, Resolver404):
+                except (NotFound, urlresolvers.Resolver404):
                     pass
             # the uri wasn't found at any of the polymorphic resources, it is an incorrect URI for this resource
             raise
@@ -711,9 +712,9 @@ class MongoEngineResource(resources.ModelResource, metaclass=MongoEngineModelDec
             if excludes and name in excludes:
                 continue
 
-            # TODO: Might need it in the future
-            # if cls.should_skip_field(f):
-            #     continue
+            # remove _cls
+            if name == '_cls':
+                continue
 
             api_field_class = cls.api_field_from_mongo_field(f)
 
